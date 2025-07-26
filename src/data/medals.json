@@ -1,0 +1,58 @@
+{
+    "medal_Python": {
+        "name": "Python Programmer",
+        "description": "I like Python!",
+        "image": "../images/python_logo.png",
+        "points": 50,
+        "bought": false
+    },
+    "JavaScript_Developer": {
+        "name": "JavaScript Developer",
+        "description": "I like JavaScript!",
+        "image": "../images/javascript_logo.png",
+        "points": 50,
+        "bought": false
+    },
+    "Java_Developer": {
+        "name": "Java Developer",
+        "description": "I like Java!",
+        "image": "../images/java_logo.png",
+        "points": 50,
+        "bought": false
+    },
+    "Golang_Developer": {
+        "name": "Golang Developer",
+        "description": "I like Golang!",
+        "image": "../images/golang_logo.png",
+        "points": 50,
+        "bought": false
+    },
+    "HTML_Developer": {
+        "name": "HTML Developer",
+        "description": "I like HTML!",
+        "image": "../images/html_logo.png",
+        "points": 50,
+        "bought": false
+    },
+    "CSS_Developer": {
+        "name": "CSS Developer",
+        "description": "I like CSS!",
+        "image": "../images/css_logo.png",
+        "points": 50,
+        "bought": false
+    },
+    "C_Developer": {
+        "name": "C Developer",
+        "description": "I like C!",
+        "image": "../images/c_logo.png",
+        "points": 50,
+        "bought": false
+    },
+    "CPP_Developer": {
+        "name": "C++ Developer",
+        "description": "I like C++!",
+        "image": "../images/cpp_logo.png",
+        "points": 50,
+        "bought": false
+    }
+}
