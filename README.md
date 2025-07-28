@@ -11,3 +11,8 @@ Artificial Intelligence was only used for the frontend in the project, or design
 - Added profile, shop, guide and other buttons to the menu, with most of them being without functionality, but that fact will be changed
 - Added functionality for `Add Task`, `Guide` and `Clear All`.
 - **The app is still under development meaning it has a lot of bugs that are to be fixed soon. I am trying to commit to this repo everyday**.
+
+# CHANGES 2025.07.27
+- Fixed bug:
+- **Main content frame properly not updating**
+- **Incorrect override of task_list.json**
