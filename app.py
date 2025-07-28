@@ -7,6 +7,7 @@ from src.shop import *
 from src.user_profile import *
 from src.clearTasks import *
 
+
 """
 Hello! PCPPTech is here ONCE again.
 In this project I decided to utilize AI and learn the basics since AI is the future.
@@ -19,52 +20,105 @@ but the backend was coded 100% by me. My creativity is just as good as a pickle'
 So basically AI only helped me with the frontend and autocompletion which spared a lot of time.
 """
 
-#! button functions
-#! error near these parts, TODO fix
 
-"""
-def taskCompletedCHECKED(taskName):
-    with open("src/data/task_list.json", "r") as f:
-        data = json.load(f)
-    if taskName in data:
-        data[taskName]["completed"] = True
-        with open("src/data/task_list.json", "w") as f:
-            json.dump(data, f, indent=4)
 
-    
 
-def taskCompletedUNCHECKED(taskName):
-    with open("src/data/task_list.json", "r") as f:
-        data = json.load(f)
-    if taskName in data:
-        data[taskName]["completed"] = False
-        with open("src/data/task_list.json", "w") as f:
-            json.dump(data, f, indent=4)
-clickcount = 0
-def clickedDone():
-    global clickcount
-    clickcount += 1
-    if clickcount % 2 == 0:
-        with open("src/data/task_list.json", "r") as f:
-            data = json.load(f) #! I dont know what to do next, we can't assume the task but we lack data of which task was checked
-        taskCompletedCHECKED()
-        print("Task marked as completed!")
-    else:
-        taskCompletedUNCHECKED()
-        print("Task marked as not completed!")
-        
-"""
+# Damn, that was a tough one.
+# TODO
+# I think everything is already finished here.
+# I just need to complete the Profile, Shop and remove task.
+# So I planned my order like this:
+# 1. Remove task
+# 2. Profile
+# 3. Shop
+
+
+
+
+
 theCLICKCOUNT = 0
 
-def labelClicked(dataNAME, task):
+def labelClickedWarning(data, task):
+    def clickedYes():
+        data[task]["completed"] = not data[task]["completed"]
+        with open("src/data/task_list.json", "w") as f:
+            json.dump(data, f, indent=4)
+        
+        with open("src/data/uncategorized.json", "r+") as f:
+            doitpoints = json.load(f)
+            doitpoints["doit_points"] += 5 # yey
+        print("[*] Because you completed this task, user, you received 5 doit coins. Keep up the good work and buy yourself something nice.")
+        warn.destroy()
+
+        
+
+    warn = CTk()
+    warn.title("Warning")
+
+    width = 800
+    height = 500
+    sw = warn.winfo_screenwidth()
+    sh = warn.winfo_screenheight()
+
+    x = (sw - width) // 2
+    y = (sh - height) // 2
+    warn.geometry(f"{width}x{height}+{x}+{y}")
+    warn.configure(fg_color="#2b2b2b")
+    warn.resizable(False, False)
+
+    label = CTkLabel(
+        warn,
+        text=f"Are you sure you want to mark '{task}' as {'completed' if not data[task]['completed'] else 'not completed'}?",
+        font=("Cascadia Code", 14)
+    )
+
+    buttonFrame = CTkFrame(warn, fg_color="#2b2b2b")
+    
+
+    yesButton = CTkButton(
+        buttonFrame,
+        text="Yes",
+        font=("Cascadia Code", 14),
+        command=clickedYes
+    )
+    noButton = CTkButton(
+        buttonFrame,
+        text="No",
+        font=("Cascadia Code", 14),
+        command=warn.destroy
+    )
+
+    smol = CTkLabel(
+        warn,
+        text="Your reward for completing this task is 5 doit coins! (this action is irreversible)",
+        font=("Cascadia Code", 12),
+        text_color="green",
+    )
+
+    # packs
+    label.pack(pady=10)
+    buttonFrame.pack(pady=10)
+    yesButton.pack(side=LEFT, padx=5)
+    noButton.pack(side=RIGHT, padx=5)
+    smol.pack(pady=5)
+    warn.mainloop()
+
+
+def labelClicked(task):
     global theCLICKCOUNT
+    with open("src/data/task_list.json", "r") as f:
+            data = json.load(f)
     theCLICKCOUNT += 1
-    if theCLICKCOUNT % 2 == 0:
-        dataNAME[task]["completed"]=False
-        print(f"Task {task} marked as completed!")
+    if theCLICKCOUNT > 1 or data[task]['completed'] == True:
+        print("Warned ya, this action is IRREVERSIBLE. Remove the task and add it again if youre THAT desperate lmfao")
     else:
-        dataNAME[task]["completed"]=True
-        print(f"Task {task} marked as not completed!")
+        
+        
+        labelClickedWarning(data, task)
+        
+        
+        with open("src/data/task_list.json", "w") as f:
+            json.dump(data, f, indent=4)
 
 
 
@@ -206,6 +260,7 @@ content_label.pack(pady=10)
 #? nevermind it was easy :3
 
 listoftasks = {}
+task_buttons = {} # keeping track of buttons just to update their fuckass design
 
 def auto_update():
     with open("src/data/task_list.json", "r") as file:
@@ -217,28 +272,35 @@ def auto_update():
             listoftasks[k] = v
             tasks = CTkButton(
                 content_frame,
-                text=f"{k} - {'✅' if data[k]["completed"] else '❌'}",
+                text=f"{k} - {'✅' if v['completed'] else '❌'}",
                 font=("Cascadia Code", 14),
                 height=40,
                 width=300,
                 cursor="hand2",
-                fg_color="#4CAF50" if data[k]["completed"] else "#f44336",
-                hover_color="#45a049" if data[k]['completed'] else "#d32f2f",
+                fg_color="#4CAF50" if v['completed'] else "#f44336",
+                hover_color="#45a049" if v['completed'] else "#d32f2f",
                 text_color="white",
-                command=lambda task=k: labelClicked(data, task)
+                command=lambda task=k: labelClicked(task)
             )
 
             tasks.pack(pady=5)
+            task_buttons[k] = tasks
 
 
         else:
-            pass
+            if listoftasks[k] != v:
+                listoftasks[k] = v
+                if v['completed']:
+                    task_buttons[k].configure(text=f"{k} - ✅", fg_color="#4CAF50", hover_color="#45a049")
+                else:
+                    task_buttons[k].configure(text=f"{k} - ❌", fg_color="#f44336", hover_color="#d32f2f")
+                
 
-        mainWindow.after(200, auto_update)
-auto_update() # start recursion
+    mainWindow.after(200, auto_update)
+
         
     
-    
+auto_update() # start recursion
 
 
 
@@ -262,5 +324,7 @@ button_addTask.bind("<Leave>", addTaskSTOP)
 
 button_removeTask.bind("<Enter>", removeTaskHOVER)
 button_removeTask.bind("<Leave>", removeTaskSTOP)
+
+
 
 mainWindow.mainloop()
